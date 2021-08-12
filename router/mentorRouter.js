@@ -9,13 +9,13 @@ router.get("/mentors" , async(req, res) => {
 })
 
 router.post("/addmentors", async (req, res) => {
-  const { name } = req.body;
-  const newMentor = await Mentors.findOne({ name: name });
-  if(newMentor){
-      console.log(newMentor);
-  }
+  const { fname , lname } = req.body;
+  // const newMentor = await Mentors.findOne({ fname: fname });
+  // if(newMentor){
+  //     console.log(newMentor);
+  // }
   try {
-    const regMentor = new Mentors({ name: name });
+    const regMentor = new Mentors({ fname , lname });
     await regMentor.save();
     res.send("success");
   } catch (err) {
@@ -24,5 +24,17 @@ router.post("/addmentors", async (req, res) => {
   }
 });
 
+//delete request
+router.delete("/mentorDelete", async (req, res) => {
+  const { id } = req.body;
+  const delMentor = await Mentors.findOne({ _id: id });
+  if (delMentor) {
+    await delMentor.remove();
+    console.log("Student deleted" + delMentor);
+    res.send(delMentor);
+  } else {
+    res.json({ error: "No user Found" });
+  }
+});
 
 export const mentorRouter = router;
